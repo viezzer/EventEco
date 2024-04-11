@@ -1,5 +1,5 @@
 <h1>Instruções de instalação do app</h1>
-1. Criar ambiente virtual python chamado (django-env) para o git não enviar o ambiente nos commits:<br>
+1. Na pasta do projeto, criar ambiente virtual python chamado (django-env) para o git não enviar o ambiente nos commits:<br>
 <code>python -m venv django-env</code>
 
 2. Ativar ambiente python no windows:<br>
