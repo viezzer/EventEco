@@ -10,3 +10,4 @@
 
 4. acessar diretório mysite e executar:<br>
 <code>py manage.py makemigrations</code>
+<code>py manage.py migrate</code>
