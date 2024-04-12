@@ -15,5 +15,5 @@
 5. Iniciar servidor da aplicação:<br>
 <code>python manage.py runserver</code>
 
-user: admin
+user: admin<br>
 password: 123 
