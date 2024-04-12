@@ -1,11 +1,9 @@
 from datetime import datetime
 from django.db import models
 import requests
-from django_ckeditor_5.fields import CKEditor5Field
 import pytz
 
 utc=pytz.UTC
-
 
 class EventEco(models.Model):
 
@@ -13,7 +11,7 @@ class EventEco(models.Model):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     name = models.CharField(max_length=255)
-    detail = CKEditor5Field(config_name='extends')
+    detail = models.TextField()
     private_event = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)

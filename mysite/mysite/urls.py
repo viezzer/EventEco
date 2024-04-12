@@ -25,6 +25,7 @@ admin.site.site_title = 'EventEco'
 
 urlpatterns = [
     path("eventos/", include("eventos.urls")),
+    path('tinymce/', include('tinymce.urls')),  # new
     path('admin/', admin.site.urls),
     path('', RedirectView.as_view(url='/eventos', permanent=True)),
 ]

@@ -1,12 +1,9 @@
 from datetime import timedelta
-
-from django_ckeditor_5.widgets import CKEditor5Widget
-
+from tinymce.widgets import TinyMCE
 from .services import DataService
 from django import forms
 from django.utils.safestring import mark_safe
 from .models import EventEco
-import datetime
 
 
 class ImageWidget(forms.widgets.Widget):
@@ -82,7 +79,7 @@ class EditEventEcoFormAdmin(forms.ModelForm):
             'event_id': forms.TextInput(attrs={'readonly': 'readonly'}),  # Campo event_id bloqueado para edição
             'start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Widget para selecionar data e horário
             'end_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Widget para selecionar data e horário
-            "detail": CKEditor5Widget(config_name='extends', attrs={"style": "max-width: 300px;"}),  # Defina o tamanho máximo desejado aqui
+            "detail": TinyMCE(),  # Defina o tamanho máximo desejado aqui
             'name': forms.TextInput(attrs={'size': 50}),
             'url': forms.TextInput(attrs={'size': 90}),
             'image': forms.TextInput(attrs={'size': 90}),
@@ -104,4 +101,6 @@ class EditDetailEventEcoForm(forms.ModelForm):
         fields = (
             'detail',
         )
-
+        widgets = {
+            "detail": TinyMCE(),  # Defina o tamanho máximo desejado aqui
+        }
