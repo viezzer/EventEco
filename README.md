@@ -12,7 +12,8 @@
 <code>py manage.py makemigrations</code><br>
 <code>py manage.py migrate</code><br>
 
-5. Criar usuário admin <a href="https://docs.djangoproject.com/en/5.0/intro/tutorial02/#creating-an-admin-user">Documentação django</a><br>
-
-6. Iniciar servidor da aplicação:<br>
+5. Iniciar servidor da aplicação:<br>
 <code>python manage.py runserver</code>
+
+user: admin
+password: 123 
