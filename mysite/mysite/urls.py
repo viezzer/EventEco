@@ -16,8 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import RedirectView
+
+admin.site.site_header = 'EventEco Admin'
+# admin.site.index_title = 'Modelos'
+admin.site.site_title = 'EventEco'
+
 
 urlpatterns = [
     path("eventos/", include("eventos.urls")),
     path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/eventos', permanent=True)),
 ]

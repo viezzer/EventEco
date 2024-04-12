@@ -1,116 +1,303 @@
+from datetime import datetime
 from django.db import models
+import requests
+from django_ckeditor_5.fields import CKEditor5Field
+import pytz
 
-# Api Sympla: Controle e atualização dos dados vindos do Sympla.
-# Evento Sympla: Classe espelhada do Sympla.
-# Evento Eco: Classe editável com base no Sympla.
-# Anfitrião: Classe espelhada do Sympla.
-# Categoria: Classe espelhada do Sympla.
-# Local: Classe espelhada do Sympla.
-# Pedido: Classe espelhada do Sympla.
-# Cliente: Classe espelhada do Sympla.
+utc=pytz.UTC
 
-class Api(models.Model):
-    access_token = models.CharField(max_length=255)
-    client_id = models.CharField(max_length=255)
-    client_secret = models.CharField(max_length=255)
-    base_url = models.URLField(max_length=200)
 
-    def __str__(self):
-        return f"URL: {self.base_url}"
+class EventEco(models.Model):
 
-class EventoSympla(models.Model):
-    id = models.IntegerField(primary_key=True)
+    event_id = models.IntegerField(primary_key=True, )
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     name = models.CharField(max_length=255)
-    detail = models.TextField()
+    detail = CKEditor5Field(config_name='extends')
     private_event = models.BooleanField(default=False)
     published = models.BooleanField(default=False)
     cancelled = models.BooleanField(default=False)
-    image = models.CharField(max_length=255, blank=True, null=True)
-    url = models.URLField(max_length=200, blank=True, null=True)
+    image = models.CharField(max_length=255)
+    url = models.CharField(max_length=255)
+    preset = models.IntegerField()
 
     def __str__(self):
-        return f"Evento Sympla - ID: {self.id}, Nome: {self.name}"
+        return f"Evento Eco: {self.event_id}"
 
-class EventoEco(models.Model):
-    id = models.IntegerField(primary_key=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    name = models.CharField(max_length=255)
-    detail = models.TextField()
-    private_event = models.BooleanField(default=False)
-    published = models.BooleanField(default=False)
-    cancelled = models.BooleanField(default=False)
-    image = models.URLField(max_length=255)
-    url = models.URLField(max_length=255)
+    class Meta:
+        verbose_name = "Evento"
+        verbose_name_plural = "Eventos"
+
+    def is_valid(self):
+        return not self.cancelled and not self.private_event and self.published
+
+
+class SymplaAddress:
+    country: str
+    address: str
+    address_alt: str
+    city: str
+    address_num: str
+    name: str
+    state: str
+    neighborhood: str
+    zip_code: str
+    lat: float
+    lon: float
+
+    def __init__(self, country, address, address_alt, city, address_num, name, lon,
+                 state, neighborhood, zip_code, lat):
+        self.country = country
+        self.address = address
+        self.address_alt = address_alt
+        self.city = city
+        self.address_num = address_num
+        self.name = name
+        self.lon = lon
+        self.state = state
+        self.neighborhood = neighborhood
+        self.zip_code = zip_code
+        self.lat = lat
+
+
+class SymplaHost:
+    name: str
+    description: str
+
+    def __init__(self, name, description):
+        self.name = name
+        self.description = description
+
+
+class SymplaCategory:
+    name: str
+
+    def __init__(self, name):
+        self.name = name
+
+
+class SymplaEvent:
+
+    event_id: int
+    start_date: models.DateTimeField()
+    end_date: models.DateTimeField()
+    name: str
+    detail: str
+    private_event: int
+    published: int
+    cancelled: int
+    image: str
+    address: SymplaAddress
+    host: SymplaHost
+    category_prim: SymplaCategory
+    category_sec: SymplaCategory
+    url: str
+    event_eco: EventEco
+
+    def __init__(self, event_id, start_date, end_date, name, detail, private_event, published,
+                 cancelled, image, address, host, category_prim, category_sec, url, event_eco=None):
+
+        self.event_id = event_id
+        self.start_date = start_date
+        self.end_date = end_date
+        self.name = name
+        self.detail = detail
+        self.private_event = private_event
+        self.published = published
+        self.cancelled = cancelled
+        self.image = image
+        self.address = address
+        self.host = host
+        self.category_prim = category_prim
+        self.category_sec = category_sec
+        self.url = url
+        self.event_eco = event_eco
 
     def __str__(self):
-        return f"Evento Eco - ID: {self.id}, Nome: {self.name}"
-    
-class Local(models.Model):
-    name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255)
-    address_num = models.CharField(max_length=20)
-    address_alt = models.CharField(max_length=255, blank=True, null=True)
-    neighborhood = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
-    state = models.CharField(max_length=255)
-    zip_code = models.CharField(max_length=20)
-    country = models.CharField(max_length=255)
-    lon = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
-    lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+        if self.event_eco:
+            return f"Evento Sympla: {self.event_id},"
+        return f"Evento Sympla: {self.event_id}"
+
+    def is_valid(self):
+        return not self.cancelled and not self.private_event and self.published
+
+
+class SymplaParticipant:
+    participant_id: int
+    event_id: int
+    order_id: str
+    order_status: str
+    order_date: str
+    order_updated_date: str
+    order_approved_date: str
+    ticket_number: str
+    ticket_num_qr_code: str
+    ticket_name: str
+    ticket_sale_price: float
+    first_name: str
+    last_name: str
+    email: str
+    event: SymplaEvent
+
+    def __init__(self, participant_id, event_id, order_id, order_status, order_date,
+                 order_updated_date, order_approved_date, ticket_number, ticket_num_qr_code,
+                 ticket_name, ticket_sale_price, first_name, last_name, email, event=None):
+
+        self.participant_id = participant_id
+        self.event_id = event_id
+        self.order_id = order_id
+        self.order_status = order_status
+        self.order_date = order_date
+        self.order_updated_date = order_updated_date
+        self.order_approved_date = order_approved_date
+        self.ticket_number = ticket_number
+        self.ticket_num_qr_code = ticket_num_qr_code
+        self.ticket_name = ticket_name
+        self.ticket_sale_price = ticket_sale_price
+        self.first_name = first_name
+        self.last_name = last_name
+        self.email = email
+        self.event = event
+
+
+class SymplaApi:
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.__access_token = '3f91929265b642131da64207388623a52fdd5c970093ce9102b44e4b87b82fc4'
+        self.__url = "https://api.sympla.com.br"
+        self.__headers = {
+            's_token': self.__access_token,
+        }
 
     def __str__(self):
-        return f"Local - {self.name}, {self.address}, {self.city}, {self.state}"
-    
-class Pedido(models.Model):
-    id = models.IntegerField(primary_key=True)
-    event_id = models.IntegerField()
-    order_id = models.CharField(max_length=255)
-    order_status = models.CharField(max_length=255)
-    order_date = models.DateTimeField()
-    order_updated_date = models.DateTimeField()
-    order_approved_date = models.DateTimeField(null=True, blank=True)
-    order_discount = models.CharField(max_length=255)
-    ticket_number = models.CharField(max_length=255)
-    ticket_num_qr_code = models.CharField(max_length=255)
-    ticket_name = models.CharField(max_length=255)
-    pdv_user = models.CharField(max_length=255)
-    ticket_sale_price = models.DecimalField(max_digits=10, decimal_places=2)
+        return f"URL: {self.__url}"
 
-    def __str__(self):
-        return f"Pedido - ID: {self.id}, Evento ID: {self.event_id}, Order ID: {self.order_id}"
-    
-class Cliente(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.EmailField()
+    def get_events(self):
+        url = self.__url + "/public/v4/events"
+        response = requests.request("GET", url, headers=self.__headers)
+        # print(json.dumps(response, indent=4))
 
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} - {self.email}"
+        if response.status_code != 200:
+            return []
 
-    
-class Categoria(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+        response = response.json()
 
-    def __str__(self):
-        return self.name
-    
-class Anfitriao(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+        events = []
+        for dados in response['data']:
+            category_prim = SymplaCategory(name=dados['category_prim']['name'])
+            category_sec = SymplaCategory(name=dados['category_sec']['name'])
+            address = SymplaAddress(
+                country=dados['address']['country'],
+                address=dados['address']['address'],
+                address_alt=dados['address']['address_alt'],
+                city=dados['address']['city'],
+                address_num=dados['address']['address_num'],
+                name=dados['address']['name'],
+                lon=dados['address']['lon'],
+                state=dados['address']['state'],
+                neighborhood=dados['address']['neighborhood'],
+                zip_code=dados['address']['zip_code'],
+                lat=dados['address']['lat']
+            )
 
-    def __str__(self):
-        return self.name
+            host = SymplaHost(name=dados['host']['name'], description=dados['host']['description'])
+            event = SymplaEvent(
+                event_id=dados['id'],
+                start_date=utc.localize(datetime.strptime(dados['start_date'], '%Y-%m-%d %H:%M:%S')),
+                end_date=utc.localize(datetime.strptime(dados['end_date'], '%Y-%m-%d %H:%M:%S')),
+                name=dados['name'],
+                detail=dados['detail'],
+                private_event=dados['private_event'],
+                published=dados['published'],
+                cancelled=dados['cancelled'],
+                image=dados['image'],
+                address=address,
+                host=host,
+                category_prim=category_prim,
+                category_sec=category_sec,
+                url=dados['url'],
+            )
 
-# class Question(models.Model):
-#     question_text = models.CharField(max_length=200)
-#     pub_date = models.DateTimeField("date published")
+            events.append(event)
 
+        return events
 
-# class Choice(models.Model):
-#     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-#     choice_text = models.CharField(max_length=200)
-#     votes = models.IntegerField(default=0)
+    def get_event_by_id(self, event_id):
+        url = self.__url + f"/public/v4/events/{event_id}"
+        response = requests.request("GET", url, headers=self.__headers)
+        # print(json.dumps(response, indent=4))
+
+        if response.status_code != 200:
+            return None
+
+        dados = response.json()['data']
+
+        category_prim = SymplaCategory(name=dados['category_prim']['name'])
+        category_sec = SymplaCategory(name=dados['category_sec']['name'])
+        address = SymplaAddress(
+            country=dados['address']['country'],
+            address=dados['address']['address'],
+            address_alt=dados['address']['address_alt'],
+            city=dados['address']['city'],
+            address_num=dados['address']['address_num'],
+            name=dados['address']['name'],
+            lon=dados['address']['lon'],
+            state=dados['address']['state'],
+            neighborhood=dados['address']['neighborhood'],
+            zip_code=dados['address']['zip_code'],
+            lat=dados['address']['lat']
+        )
+
+        host = SymplaHost(name=dados['host']['name'], description=dados['host']['description'])
+        event = SymplaEvent(
+            event_id=dados['id'],
+            start_date=utc.localize(datetime.strptime(dados['start_date'], '%Y-%m-%d %H:%M:%S')),
+            end_date=utc.localize(datetime.strptime(dados['end_date'], '%Y-%m-%d %H:%M:%S')),
+            name=dados['name'],
+            detail=dados['detail'],
+            private_event=dados['private_event'],
+            published=dados['published'],
+            cancelled=dados['cancelled'],
+            image=dados['image'],
+            address=address,
+            host=host,
+            category_prim=category_prim,
+            category_sec=category_sec,
+            url=dados['url']
+        )
+
+        return event
+
+    def get_participants_by_event_id(self, event_id):
+        url = self.__url + f"/public/v3/events/{event_id}/participants"
+        # print(json.dumps(response, indent=4))
+        response = requests.request("GET", url, headers=self.__headers)
+
+        if response.status_code != 200:
+            return []
+
+        response = response.json()
+
+        participants = []
+        for dados in response['data']:
+            participant = SymplaParticipant(
+                participant_id=dados['id'],
+                event_id=dados['event_id'],
+                order_id=dados['order_id'],
+                order_status=dados['order_status'],
+                order_date=dados['order_date'],
+                order_updated_date=dados['order_updated_date'],
+                order_approved_date=dados['order_approved_date'],
+                ticket_number=dados['ticket_number'],
+                ticket_num_qr_code=dados['ticket_num_qr_code'],
+                ticket_name=dados['ticket_name'],
+                ticket_sale_price=dados['ticket_sale_price'],
+                first_name=dados['first_name'],
+                last_name=dados['last_name'],
+                email=dados['email']
+            )
+
+            participants.append(participant)
+
+        return participants
