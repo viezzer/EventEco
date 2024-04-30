@@ -29,15 +29,15 @@ class EventEcoDetail(DetailView):
 
     def get_object(self, queryset=None):
         dataservice = DataService()
-        event = dataservice.get_final_event_by_id(self.kwargs.get('pk'))
+        event = dataservice.get_valid_event_by_id(self.kwargs.get('pk'))
         return event
 
 
 def index(request):
     service = DataService()
     html = "Hello, world. You're at the eventos index.<br>"
-    for evento in service.get_final_events():
-        html += '<b>EVENT_ID:</b> ' + str(evento.event_id) + '<br>'
+    for evento in service.get_valid_events():
+        html += '<b>EVENT_ID:</b> ' + str(evento.id) + '<br>'
         html += '<b>NAME:</b> ' + evento.name + '<br>'
 
         if isinstance(evento, EventEco):
@@ -46,7 +46,7 @@ def index(request):
         else:
             html += '<b>CRIADO NA BASE:</b> ❌ <br>'
 
-        html += f"<a href=\"http://127.0.0.1:8000/eventos/{evento.event_id}\"><button>Ver Evento</button></a><br>"
+        html += f"<a href=\"http://127.0.0.1:8000/eventos/{evento.id}\"><button>Ver Evento</button></a><br>"
         html += "<br>"
 
     return HttpResponse(html)

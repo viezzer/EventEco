@@ -2,6 +2,7 @@ from datetime import datetime
 import requests
 from .models import EventEco, SymplaCategory, SymplaAddress, SymplaEvent, SymplaHost, SymplaParticipant
 import pytz
+
 utc = pytz.UTC
 
 
@@ -48,7 +49,7 @@ class SymplaApi:
 
             host = SymplaHost(name=dados['host']['name'], description=dados['host']['description'])
             event = SymplaEvent(
-                event_id=dados['id'],
+                id=dados['id'],
                 start_date=utc.localize(datetime.strptime(dados['start_date'], '%Y-%m-%d %H:%M:%S')),
                 end_date=utc.localize(datetime.strptime(dados['end_date'], '%Y-%m-%d %H:%M:%S')),
                 name=dados['name'],
@@ -96,7 +97,7 @@ class SymplaApi:
 
         host = SymplaHost(name=dados['host']['name'], description=dados['host']['description'])
         event = SymplaEvent(
-            event_id=dados['id'],
+            id=dados['id'],
             start_date=utc.localize(datetime.strptime(dados['start_date'], '%Y-%m-%d %H:%M:%S')),
             end_date=utc.localize(datetime.strptime(dados['end_date'], '%Y-%m-%d %H:%M:%S')),
             name=dados['name'],
@@ -154,28 +155,56 @@ class DataService:
     def __init__(self):
         self.sympla_api = SymplaApi()
 
+    def get_sympla_events(self):
+        events = self.sympla_api.get_events()
+
+        events.sort(reverse=True, key=lambda event: event.start_date)
+
+        return events
+
+    @staticmethod
+    def get_database_events():
+        events = list(EventEco.objects.all())
+
+        events.sort(reverse=True, key=lambda event: event.start_date)
+
+        return events
+
     def get_events(self):
-        sympla_events = self.sympla_api.get_events()
-        database_events = EventEco.objects.all()
+        sympla_events = self.get_sympla_events()
+        database_events = self.get_database_events()
         print(database_events)
+        print(sympla_events)
 
         for sympla_event in sympla_events:
-            for database_event in database_events:
-                if sympla_event.event_id == database_event.event_id:
-                    sympla_event.event_eco = database_event
+            print('sympla_events:', sympla_event.id)
+
+        for database_event in database_events:
+            for sympla_event in sympla_events:
+                if sympla_event.id == database_event.id:
+                    sympla_events.remove(sympla_event)  # Removendo o evento do array
+                    break
+
+        sympla_events.extend(database_events)
 
         sympla_events.sort(reverse=True, key=lambda event: event.start_date)
 
         return sympla_events
 
-    def get_final_events(self):
-        events = []
+    def get_sympla_events_not_in_database(self):
+        sympla_events = self.get_sympla_events()
+        database_events = self.get_database_events()
 
-        for event in self.get_events():
-            if event.event_eco:
-                events.append(event.event_eco)
-            else:
-                events.append(event)
+        for database_event in database_events:
+            for sympla_event in sympla_events:
+                if sympla_event.id == database_event.id:
+                    sympla_events.remove(sympla_event)  # Removendo o evento do array
+                    break
+
+        return sympla_events
+
+    def get_valid_events(self):
+        events = self.get_events()
 
         events.sort(reverse=True, key=lambda event: event.start_date)
 
@@ -183,8 +212,8 @@ class DataService:
 
         return events
 
-    def get_final_event_by_id(self, event_id):
-        event = EventEco.objects.filter(event_id=event_id).first()
+    def get_valid_event_by_id(self, event_id):
+        event = EventEco.objects.filter(id=event_id).first()
 
         if not event:
             event = self.sympla_api.get_event_by_id(event_id)
@@ -195,11 +224,12 @@ class DataService:
         return event
 
     def get_event_by_id(self, event_id):
-        sympla_event = self.sympla_api.get_event_by_id(event_id)
-        database_event = EventEco.objects.filter(event_id=event_id).first()
 
-        if sympla_event and database_event:
-            sympla_event.event_eco = database_event
+        database_event = EventEco.objects.filter(event_id=event_id).first()
+        if database_event:
+            return database_event
+
+        sympla_event = self.sympla_api.get_event_by_id(event_id)
 
         return sympla_event
 

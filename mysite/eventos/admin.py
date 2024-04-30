@@ -5,7 +5,7 @@ from .forms import CreateEventEcoFormAdmin, EditEventEcoFormAdmin
 
 class EventEcoAdmin(admin.ModelAdmin):
     form = CreateEventEcoFormAdmin
-    list_display = ['event_id', 'name', 'start_date', 'published',]
+    list_display = ['id', 'name', 'start_date', 'published',]
     sortable_by = ['name']
     ordering = ['-start_date', 'name']
 
