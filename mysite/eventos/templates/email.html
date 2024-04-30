@@ -1,0 +1,29 @@
+<form method="post">
+    {% csrf_token %}
+    <label for="primary_category">Primary Category:</label>
+    <select name="primary_category_id" id="primary_category">
+        <option value="">All</option>
+        {% for primary_category in primary_categories %}
+            <option value="{{ primary_category.id }}">{{ primary_category.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="secondary_category">Secondary Category:</label>
+    <select name="secondary_category_id" id="secondary_category">
+        <option value="">All</option>
+        <!-- Here you can add options for secondary categories, if desired -->
+    </select>
+
+    <button type="submit">Filter</button>
+</form>
+
+{% if participants %}
+    <h2>Filtered Participants:</h2>
+    <ul>
+        {% for participant in participants %}
+            <li>{{ participant.name }} - {{ participant.email }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No participants found.</p>
+{% endif %}
