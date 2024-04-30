@@ -3,7 +3,8 @@ from django.db import models
 
 class EventEco(models.Model):
 
-    event_id = models.IntegerField(primary_key=True, )
+    id = models.IntegerField(primary_key=True, )
+    sympla_event_id = models.IntegerField(null=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     name = models.CharField(max_length=255)
@@ -13,10 +14,9 @@ class EventEco(models.Model):
     cancelled = models.BooleanField(default=False)
     image = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
-    preset = models.IntegerField()
 
     def __str__(self):
-        return f"Evento Eco: {self.event_id}"
+        return f"Evento Eco: {self.id}"
 
     class Meta:
         verbose_name = "Evento"
@@ -72,7 +72,7 @@ class SymplaCategory:
 
 class SymplaEvent:
 
-    event_id: int
+    id: int
     start_date: models.DateTimeField()
     end_date: models.DateTimeField()
     name: str
@@ -86,12 +86,11 @@ class SymplaEvent:
     category_prim: SymplaCategory
     category_sec: SymplaCategory
     url: str
-    event_eco: EventEco
 
-    def __init__(self, event_id, start_date, end_date, name, detail, private_event, published,
-                 cancelled, image, address, host, category_prim, category_sec, url, event_eco=None):
+    def __init__(self, id, start_date, end_date, name, detail, private_event, published,
+                 cancelled, image, address, host, category_prim, category_sec, url):
 
-        self.event_id = event_id
+        self.id = id
         self.start_date = start_date
         self.end_date = end_date
         self.name = name
@@ -105,15 +104,12 @@ class SymplaEvent:
         self.category_prim = category_prim
         self.category_sec = category_sec
         self.url = url
-        self.event_eco = event_eco
-
-    def __str__(self):
-        if self.event_eco:
-            return f"Evento Sympla: {self.event_id},"
-        return f"Evento Sympla: {self.event_id}"
 
     def is_valid(self):
         return not self.cancelled and not self.private_event and self.published
+
+    def __str__(self):
+        return f"Evento Sympla: {self.id}"
 
 
 class SymplaParticipant:
