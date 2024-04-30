@@ -51,14 +51,11 @@ class CreateEventEcoFormAdmin(forms.ModelForm):
         pass
 
     def save(self, commit=True):
-        print("self.cleaned_data", self.cleaned_data)
         if 'id' in self.cleaned_data:
             preset_id = self.cleaned_data['id']
-            print('preset_id', preset_id)
 
             preset = None
             for event in self.preset_events:
-                print(event)
                 if int(event.id) == int(preset_id):
                     preset = event
 

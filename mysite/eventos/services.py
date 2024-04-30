@@ -173,11 +173,6 @@ class DataService:
     def get_events(self):
         sympla_events = self.get_sympla_events()
         database_events = self.get_database_events()
-        print(database_events)
-        print(sympla_events)
-
-        for sympla_event in sympla_events:
-            print('sympla_events:', sympla_event.id)
 
         for database_event in database_events:
             for sympla_event in sympla_events:
