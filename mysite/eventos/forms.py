@@ -111,14 +111,14 @@ class EditEventEcoFormAdmin(forms.ModelForm):
         self.service = DataService()
 
         if instance:
-            if instance.id != -1:
+            if instance.id > 2300000:
 
                 self.fields['id'].widget.attrs['readonly'] = True
             else:
                 preset_events = self.service.get_sympla_events_not_in_database()
 
                 choices = [(event.id, event.start_date.strftime('%d/%m/%Y')+' - '+event.name) for event in preset_events]
-                choices.insert(0, (-1, '----------'))
+                choices.insert(0, (instance.id, '----------'))
                 self.fields['id'].widget = forms.Select(choices=choices)
 
     def as_p(self):
