@@ -34,22 +34,24 @@ class EventEcoDetail(DetailView):
         return event
 
 def enviar_email_evento(request):
-    primary_categories = [1,2,3,4]  # Get all primary categories
+    dataservice = DataService()
+    categories = dataservice.get_events_categories()  # Get all primary categories
 
     participants = None
-    if request.method == 'POST':
-        primary_category_id = request.POST.get('primary_category_id')
+    
+    # if request.method == 'POST':
+    #     primary_category_id = request.POST.get('primary_category_id')
 
-        if primary_category_id:
-            participants = Participant.objects.filter(event__categoria_primaria__id=primary_category_id, event__categoria_secundaria__id=secondary_category_id)
-        elif primary_category_id:
-            participants = Participant.objects.filter(event__categoria_primaria__id=primary_category_id)
-        else:
-            participants = Participant.objects.all()
+    #     if primary_category_id:
+    #         participants = Participant.objects.filter(event__categoria_primaria__id=primary_category_id, event__categoria_secundaria__id=secondary_category_id)
+    #     elif primary_category_id:
+    #         participants = Participant.objects.filter(event__categoria_primaria__id=primary_category_id)
+    #     else:
+    #         participants = Participant.objects.all()
 
         # Here you would add logic to send email to participants, for example, using Django's Email package
 
-    return render(request, 'filter_participants.html', {'primary_categories': primary_categories, 'participants': participants})
+    return render(request, 'email.html', {'categories': categories, 'participants': participants})
 
 def index(request):
     service = DataService()

@@ -198,6 +198,15 @@ class DataService:
 
         return sympla_events
 
+    def get_events_categories(self):
+        events = self.get_sympla_events_not_in_database()
+        categories = []
+        for event in events:
+            category = event.category_prim.name
+            if category not in categories:
+                categories.append(category)
+        return categories
+
     def get_valid_events(self):
         events = self.get_events()
 
