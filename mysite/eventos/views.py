@@ -39,15 +39,13 @@ def enviar_email_evento(request):
 
     participants = None
     
-    # if request.method == 'POST':
-    #     primary_category_id = request.POST.get('primary_category_id')
+    if request.method == 'POST':
+        category = request.POST.get('category')
 
-    #     if primary_category_id:
-    #         participants = Participant.objects.filter(event__categoria_primaria__id=primary_category_id, event__categoria_secundaria__id=secondary_category_id)
-    #     elif primary_category_id:
-    #         participants = Participant.objects.filter(event__categoria_primaria__id=primary_category_id)
-    #     else:
-    #         participants = Participant.objects.all()
+        if category:
+            participants = dataservice.get_sympla_participant_by_category(category)
+        else:
+            participants = None
 
         # Here you would add logic to send email to participants, for example, using Django's Email package
 

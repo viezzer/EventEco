@@ -206,7 +206,22 @@ class DataService:
             if category not in categories:
                 categories.append(category)
         return categories
-
+    
+    def get_sympla_participant_by_category(self, category):
+        #buscar todos eventos sympla
+        events = self.get_sympla_events_not_in_database()
+        #obter id dos eventos que são da categoria selecionada
+        events_id = []
+        for event in events:
+            if event.category_prim.name==category:
+                events_id.append(event.id)
+        #obter participantes dos eventos pelo id
+        participants = []
+        for id in events_id:
+            participants.append(self.get_participants_by_event_id(id))
+        #retornar participantes dos eventos
+        return participants
+    
     def get_valid_events(self):
         events = self.get_events()
 
