@@ -216,9 +216,9 @@ class DataService:
             if event.category_prim.name==category:
                 events_id.append(event.id)
         #obter participantes dos eventos pelo id
-        participants = []
+        participants = None
         for id in events_id:
-            participants.append(self.get_participants_by_event_id(id))
+            participants = self.get_participants_by_event_id(id)
         #retornar participantes dos eventos
         return participants
     
@@ -244,7 +244,7 @@ class DataService:
 
     def get_event_by_id(self, event_id):
 
-        database_event = EventEco.objects.filter(event_id=event_id).first()
+        database_event = EventEco.objects.filter(id=event_id).first()
         if database_event:
             return database_event
 
