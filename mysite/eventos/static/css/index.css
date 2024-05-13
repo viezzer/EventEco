@@ -1,0 +1,61 @@
+.card-member {
+    width: 100%;
+    margin-top: 20px;
+}
+.card {
+    margin-top: 20px;
+}
+.custom-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.custom-card img {
+    width: 80px;
+    height: 80px;
+}
+.search-group {
+    display: flex;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    overflow: hidden; 
+}
+.search-group input, .search-group button {
+    border: none;
+    outline: none;
+}
+.search-group:focus-within {
+    box-shadow: 0 0 0 .25rem rgba(13, 110, 253, 0.25);
+}
+.search-group input {
+    flex-grow: 1;
+}
+.search-group button {
+    background: none;
+}
+.search-group input:focus,
+.search-group button:focus {
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0), 0 0 0 rgba(0, 0, 0, 0);
+    z-index: 3;
+}
+.rounded-link {
+    display: inline-block;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    padding: 0;
+    overflow: hidden; 
+    text-decoration: none;
+}
+.rounded-link img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.calendar-container{
+    background-color: #E8EAEE;
+    padding: .5rem 1.5rem;
+    border-radius: .5rem;
+}

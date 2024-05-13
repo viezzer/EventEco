@@ -53,18 +53,8 @@ def enviar_email_evento(request):
 
 def index(request):
     service = DataService()
-    html = "Hello, world. You're at the eventos index.<br>"
-    for evento in service.get_valid_events():
-        html += '<b>EVENT_ID:</b> ' + str(evento.id) + '<br>'
-        html += '<b>NAME:</b> ' + evento.name + '<br>'
+    events = service.get_valid_events()
+    for event in events:
+        event.is_eco = isinstance(event, EventEco)
 
-        if isinstance(evento, EventEco):
-            html += '<b>CRIADO NA BASE:</b> ✅ <br>'
-
-        else:
-            html += '<b>CRIADO NA BASE:</b> ❌ <br>'
-
-        html += f"<a href=\"http://127.0.0.1:8000/eventos/{evento.id}\"><button>Ver Evento</button></a><br>"
-        html += "<br>"
-
-    return HttpResponse(html)
+    return render(request, 'index.html', { 'events': events })

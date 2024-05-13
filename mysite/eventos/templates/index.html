@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block title %}EventEco • Home{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/index.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'calendar/css/rome.css' %}" type="text/css">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="col-md-10 mx-auto py-4">
+    <div class="row align-items-center justify-content-between">
+        <div class="col-md-2">
+            <h1>EventEco</h1>
+            <p>Procure por eventos que estão chegando</p>
+        </div>
+        <div class="col-md-8">
+            <div class="search-group">
+                <input type="text" class="form-control" placeholder="Procure por eventos que estão chegando" aria-label="Search">
+                <button class="btn" type="button" id="button-addon2">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </div>
+        <div class="col-md-1">
+            <a href="#" class="rounded-link">
+                <img src="https://via.placeholder.com/50" alt="Icon">
+            </a>
+        </div>  
+    </div>
+    
+    <div class="row mt-3">
+      <div class="calendar-container col-md-4">
+        <h5>Calendário</h5>
+        <div id="inline_cal"></div>
+      </div>
+      <div class="col-md-8">
+        <h5>Próximos eventos</h5>
+        <div class="list-group">
+            {% for event in events %}
+                <a href="{% url 'eventeco_detail' event.id %}" class="list-group-item list-group-item-action">{{ event.name }} {% if event.is_eco %}✅{% else %}❌{% endif %}</a>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-md-12">
+        <h5>Equipe Caxias Lixo Zero</h5>
+        <div class="card-deck">
+          <div class="card custom-card">
+            <img src="team_member1.jpg" alt="Member">
+            <div class="card-body">
+              <h5 class="card-title">[NOME]</h5>
+              <p class="card-text">[FUNÇÃO]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+    <script src="{% static 'calendar/js/rome.js' %}"></script>
+    <script src="{% static 'calendar/js/main.js' %}"></script>
+{% endblock extra_js %}
