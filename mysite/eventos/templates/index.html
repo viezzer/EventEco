@@ -11,7 +11,7 @@
 
 {% block content %}
 
-<div class="col-md-10 mx-auto py-4">
+<div class="col-md-10 mx-auto px-10 py-4">
     <div class="row align-items-center justify-content-between">
         <div class="col-md-2">
             <h1>EventEco</h1>
@@ -27,32 +27,54 @@
         </div>
         <div class="col-md-1">
             <a href="#" class="rounded-link">
-                <img src="https://via.placeholder.com/50" alt="Icon">
+                <img src="https://placehold.co/50x50" alt="Icon">
             </a>
         </div>  
     </div>
     
-    <div class="row mt-3">
+    <div class="row mt-3 justify-content-between">
       <div class="calendar-container col-md-4">
-        <h5>Calendário</h5>
+        <h4>Calendário</h4>
         <div id="inline_cal"></div>
       </div>
-      <div class="col-md-8">
-        <h5>Próximos eventos</h5>
-        <div class="list-group">
-            {% for event in events %}
-                <a href="{% url 'eventeco_detail' event.id %}" class="list-group-item list-group-item-action">{{ event.name }} {% if event.is_eco %}✅{% else %}❌{% endif %}</a>
-            {% endfor %}
-        </div>
+      <div class="events-container col-md-7">
+        <h5>Eventos dia <span id="current-date"></span></h5>
+        <div id="current-date-events" class="list-group"></div>
       </div>
     </div>
 
-    <div class="row mt-3">
-      <div class="col-md-12">
-        <h5>Equipe Caxias Lixo Zero</h5>
+    <div class="row mt-3 justify-content-between">
+      <div class="col-md-4">
+        <h4>Próximos Eventos</h4>
+        <div id="next-events" class="list-group"></div>
+        <button class="btn btn-primary float-right">Criar Evento</button>
+      </div>
+      <div class="team-container col-md-7">
+        <h4>Equipe Caxias Lixo Zero</h4>
         <div class="card-deck">
           <div class="card custom-card">
-            <img src="team_member1.jpg" alt="Member">
+            <img src="https://placehold.co/50x50" alt="Member">
+            <div class="card-body">
+              <h5 class="card-title">[NOME]</h5>
+              <p class="card-text">[FUNÇÃO]</p>
+            </div>
+          </div>
+          <div class="card custom-card">
+            <img src="https://placehold.co/50x50" alt="Member">
+            <div class="card-body">
+              <h5 class="card-title">[NOME]</h5>
+              <p class="card-text">[FUNÇÃO]</p>
+            </div>
+          </div>
+          <div class="card custom-card">
+            <img src="https://placehold.co/50x50" alt="Member">
+            <div class="card-body">
+              <h5 class="card-title">[NOME]</h5>
+              <p class="card-text">[FUNÇÃO]</p>
+            </div>
+          </div>
+          <div class="card custom-card">
+            <img src="https://placehold.co/50x50" alt="Member">
             <div class="card-body">
               <h5 class="card-title">[NOME]</h5>
               <p class="card-text">[FUNÇÃO]</p>
@@ -67,6 +89,7 @@
 {% endblock content %}
 
 {% block extra_js %}
+    {{ events|json_script:"events-data" }}
     <script src="{% static 'calendar/js/rome.js' %}"></script>
     <script src="{% static 'calendar/js/main.js' %}"></script>
 {% endblock extra_js %}

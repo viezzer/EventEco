@@ -54,7 +54,14 @@ def enviar_email_evento(request):
 def index(request):
     service = DataService()
     events = service.get_valid_events()
-    for event in events:
-        event.is_eco = isinstance(event, EventEco)
+    eventos_dict = [evento_to_dict(event) for event in events]
+    return render(request, 'index.html', { 'events': eventos_dict })
 
-    return render(request, 'index.html', { 'events': events })
+def evento_to_dict(event):
+    return {
+        "id": event.id,
+        "name": event.name,
+        "is_eco": isinstance(event, EventEco),
+        "start_date": event.start_date,
+        "end_date": event.end_date
+    }

@@ -61,9 +61,14 @@
   text-align: center;
   /* new */
   line-height: 0;
-  width: 50px!important;
-  height: 50px!important;
+  width: 40px!important;
+  height: 40px!important;
 }
+
+.rd-day-body:not(.rd-day-disabled){
+  font-weight: bold;  
+}
+
 .rd-day-selected,
 .rd-time-selected,
 .rd-time-option:hover {
@@ -79,8 +84,17 @@
 }
 .rd-day-disabled {
   cursor: default;
-  color: #fcc;
+  color: #ff0000;
+  opacity: .6;
 }
+
+.rd-day-prev-month.rd-day-disabled,
+.rd-day-next-month.rd-day-disabled {
+  cursor: default;
+  color: #ff0000;
+  opacity: .3;
+}
+
 .rd-time {
   position: relative;
   display: inline-block;
@@ -109,4 +123,9 @@
 
 .rd-days {
   margin-top: 20px;
+}
+
+.rd-month-label{
+  font-size: .85rem;
+  font-weight: 600;
 }

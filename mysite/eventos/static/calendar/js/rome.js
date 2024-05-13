@@ -3028,7 +3028,7 @@ module.exports = eventmap;
     utils_hooks__hooks.defaultFormat = 'YYYY-MM-DDTHH:mm:ssZ';
 
     function toString () {
-        return this.clone().locale('pt-br').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
+        return this.clone().locale('en').format('ddd MMM DD YYYY HH:mm:ss [GMT]ZZ');
     }
 
     function moment_format__toISOString () {

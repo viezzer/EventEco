@@ -6,15 +6,24 @@
     margin-top: 20px;
 }
 .custom-card {
+    padding-top: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 .custom-card img {
-    width: 80px;
-    height: 80px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
 }
+
+.card-body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .search-group {
     display: flex;
     border: 1px solid #ced4da;
@@ -56,6 +65,36 @@
 
 .calendar-container{
     background-color: #E8EAEE;
-    padding: .5rem 1.5rem;
+    padding: 1rem 1.5rem;
     border-radius: .5rem;
+    margin-block-end: 1rem;
+}
+
+.events-container{
+    background-color: #E8EAEE;
+    padding: 1rem 1.5rem;
+    border-radius: .5rem;
+    margin-block-end: 1rem;
+}
+
+.team-container{
+    background-color: #E8EAEE;
+    padding: 1rem 1.5rem;
+    border-radius: .5rem;
+    margin-block-end: 1rem;
+}
+
+.btn-primary{
+    background-color: #A0C170;
+    border-color: #A0C170;
+}
+
+.btn-primary:hover {
+    background-color: #8ba762;
+    border-color: #8ba762;
+}
+
+.list-group-item i{
+    font-size: 1rem;
+    color: black;
 }

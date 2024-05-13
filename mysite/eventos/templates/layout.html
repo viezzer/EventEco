@@ -15,23 +15,24 @@
     <body>
       <div class="container-fluid">
         <div class="row">
-          <div class="sidebar bg-light py-4 px-4">
+          <div class="sidebar py-4 px-4">
             <ul class="nav flex-column align-items-start">
               <li class="nav-item">
                 <a class="rounded-item" href="#">
                   <img src="{% static 'images/caxias_lixo_zero.png' %}" alt="logo">
-                  <span class="d-none">EventEco</span>
                 </a>
               </li>
+              <hr />
               <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="/eventos/">
                   <i class="bi bi-calendar-event-fill"></i>
                   <span class="d-none">Eventos</span>
                 </a>
               </li>
+              <hr />
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <i class="bi bi-calendar-check"></i>
+                <a class="nav-link" href="/eventos/email/">
+                  <i class="bi bi-bell-fill"></i>
                   <span class="d-none">Enviar e-mail</span>
                 </a>
               </li>
@@ -43,6 +44,7 @@
                   <span class="d-none">Configurações</span>
                 </a>
               </li>
+              <hr />
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <i class="bi bi-box-arrow-right"></i>
