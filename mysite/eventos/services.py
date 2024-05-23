@@ -10,7 +10,8 @@ class SymplaApi:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.__access_token = '3f91929265b642131da64207388623a52fdd5c970093ce9102b44e4b87b82fc4'
+        # self.__access_token = '3f91929265b642131da64207388623a52fdd5c970093ce9102b44e4b87b82fc4'
+        self.__access_token = '245840bcd70a30ec7bc715bc2fce00a7c57a2426294d4e8748293d97dd0308e7'
         self.__url = "https://api.sympla.com.br"
         self.__headers = {
             's_token': self.__access_token,
