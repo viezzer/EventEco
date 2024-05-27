@@ -35,7 +35,8 @@ class SymplaApi:
             category_prim = SymplaCategory(name=dados['category_prim']['name'])
             category_sec = SymplaCategory(name=dados['category_sec']['name'])
             address = SymplaAddress(
-                country=dados['address']['country'],
+                # country=dados['address']['country'],
+                country='',
                 address=dados['address']['address'],
                 address_alt=dados['address']['address_alt'],
                 city=dados['address']['city'],
