@@ -157,3 +157,5 @@ TINYMCE_DEFAULT_CONFIG = {
     "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount spellchecker",
   'selector': "textarea",
 }
+
+MAILERSEND_API_KEY = 'mlsn.67fb8d46981a4754856365acc5537885052de9e2f8b41e19140b541aad120b7c'

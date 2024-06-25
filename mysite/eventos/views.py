@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .services import DataService
+from .utils import send_mailer_send_email
 
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
@@ -44,10 +45,12 @@ def enviar_email_evento(request):
 
         if category:
             participants = dataservice.get_sympla_participant_by_category(category)
+            to_emails = [participant.email for participant in participants]
+            subject = "Título/Assunto"
+            content = "Conteúdo do email."
+            # send_mailer_send_email(to_emails, subject, content)
         else:
             participants = None
-
-        # Here you would add logic to send email to participants, for example, using Django's Email package
 
     return render(request, 'email.html', {'categories': categories, 'participants': participants})
 
