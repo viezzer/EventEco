@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from .services import DataService
-from .utils import send_mailer_send_email
+from .utils import *
 
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
@@ -45,16 +45,14 @@ def enviar_email_evento(request):
     if selected_category:
         # Filtre os participantes com base na categoria selecionada
         participants = dataservice.get_sympla_participant_by_category(selected_category)
-    else:
-        participants = dataservice.get_sympla_participant_by_category(selected_category)
 
     if action == 'send_email' and participants:
         # Enviar email para os participantes filtrados
         to_emails = [participant.email for participant in participants]
         subject = "Título/Assunto"
         content = "Conteúdo do email."
-        print("teste")
-        send_mailer_send_email(to_emails, subject, content)
+        # print(send_mailer_send_email(to_emails, subject, content))
+        send_test_email(to_emails,subject,content)
     return render(request, 'email.html', {'categories': categories, 'selected_category': selected_category,'participants': participants})
     
 def index(request):

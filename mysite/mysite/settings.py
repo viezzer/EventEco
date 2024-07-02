@@ -158,4 +158,11 @@ TINYMCE_DEFAULT_CONFIG = {
   'selector': "textarea",
 }
 
-MAILERSEND_API_KEY = 'mlsn.67fb8d46981a4754856365acc5537885052de9e2f8b41e19140b541aad120b7c'
+# MAILERSEND_API_KEY = 'mlsn.67fb8d46981a4754856365acc5537885052de9e2f8b41e19140b541aad120b7c'
+MAILERSEND_API_KEY = 'mlsn.6c923c3433a5b2193122c0cd06ca7b060aefcb37d13dda14c00c1af5867fb1f2'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailersend.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'MS_4jJsmC@trial-351ndgwy22qlzqx8.mlsender.net'  # Altere para seu endereço de email MailerSend
+EMAIL_HOST_PASSWORD = 'GzDTWxpObCjeulE5'  # Altere para sua senha do MailerSend

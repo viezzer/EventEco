@@ -218,7 +218,7 @@ class DataService:
             if event.category_prim.name==category:
                 events_id.append(event.id)
         #obter participantes dos eventos pelo id
-        participants = None
+        participants = []
         for id in events_id:
             participants = self.get_participants_by_event_id(id)
         #retornar participantes dos eventos
