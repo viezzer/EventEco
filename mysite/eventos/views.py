@@ -49,7 +49,7 @@ def enviar_email_evento(request):
     if action == 'send_email' and participants:
         # Enviar email para os participantes filtrados
         to_emails = [participant.email for participant in participants]
-        subject = "Título/Assunto"
+        subject = "EventEco"
         content = "Conteúdo do email."
         # print(send_mailer_send_email(to_emails, subject, content))
         send_test_email(to_emails,subject,content)

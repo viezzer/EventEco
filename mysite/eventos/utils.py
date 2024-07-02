@@ -22,4 +22,6 @@ def send_mailer_send_email(to_emails, subject, content):
 def send_test_email(to_emails,subject,content):
     print(to_emails)
     email_from = settings.EMAIL_HOST_USER
-    send_mail(subject, content, email_from, ['eoviezzer@ucs.br'])
+    to_emails = ['eoviezzer@ucs.br','ppschneider@ucs.br','vhsantos@ucs.br']
+    for email in to_emails:
+        send_mail(subject, content, email_from, [email])
