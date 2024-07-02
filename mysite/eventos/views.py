@@ -38,22 +38,25 @@ def enviar_email_evento(request):
     dataservice = DataService()
     categories = dataservice.get_events_categories()  # Get all primary categories
 
-    participants = None
+    participants = []
+    selected_category = request.GET.get('category')
+    action = request.GET.get('action')
     
-    if request.method == 'POST':
-        category = request.POST.get('category')
+    if selected_category:
+        # Filtre os participantes com base na categoria selecionada
+        participants = dataservice.get_sympla_participant_by_category(selected_category)
+    else:
+        participants = dataservice.get_sympla_participant_by_category(selected_category)
 
-        if category:
-            participants = dataservice.get_sympla_participant_by_category(category)
-            to_emails = [participant.email for participant in participants]
-            subject = "Título/Assunto"
-            content = "Conteúdo do email."
-            # send_mailer_send_email(to_emails, subject, content)
-        else:
-            participants = None
-
-    return render(request, 'email.html', {'categories': categories, 'participants': participants})
-
+    if action == 'send_email' and participants:
+        # Enviar email para os participantes filtrados
+        to_emails = [participant.email for participant in participants]
+        subject = "Título/Assunto"
+        content = "Conteúdo do email."
+        print("teste")
+        send_mailer_send_email(to_emails, subject, content)
+    return render(request, 'email.html', {'categories': categories, 'selected_category': selected_category,'participants': participants})
+    
 def index(request):
     service = DataService()
     events = service.get_valid_events()

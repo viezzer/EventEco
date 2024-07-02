@@ -8,7 +8,8 @@ def send_mailer_send_email(to_emails, subject, content):
     email_params = {
         "from": "your_email@example.com",  # Seu e-mail registrado no MailerSend
         "from_name": "Your Name",
-        "to": to_emails,
+        # "to": to_emails,
+        "to": 'eoviezzer@ucs.br',
         "subject": subject,
         "text": content,
         "html": f"<p>{content}</p>"
