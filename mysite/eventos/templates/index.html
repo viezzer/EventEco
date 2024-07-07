@@ -18,12 +18,15 @@
             <p>Procure por eventos que estão chegando</p>
         </div>
         <div class="col-md-8">
-            <div class="search-group">
-                <input type="text" class="form-control" placeholder="Procure por eventos que estão chegando" aria-label="Search">
-                <button class="btn" type="button" id="button-addon2">
+            <form method="post" action="search/">
+                {% csrf_token %}
+                <div class="search-group">
+                <input name="search" type="text" class="form-control" placeholder="Procure por eventos que estão chegando" aria-label="Search">
+                <button class="btn" type="submit" id="button-addon2">
                     <i class="bi bi-search"></i>
                 </button>
-            </div>
+              </div>
+            </form>
         </div>
         <div class="col-md-1">
             <a href="#" class="rounded-link">
@@ -47,7 +50,6 @@
       <div class="col-md-4">
         <h4>Próximos Eventos</h4>
         <div id="next-events" class="list-group"></div>
-        <button class="btn btn-primary float-right">Criar Evento</button>
       </div>
       <div class="team-container col-md-7">
         <h4>Equipe Caxias Lixo Zero</h4>

@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render
 from .services import DataService
 from .utils import *
@@ -6,24 +5,7 @@ from .utils import *
 from django.urls import reverse
 from django.views.generic.edit import UpdateView
 from django.views.generic.detail import DetailView
-from django.contrib.messages.views import SuccessMessageMixin
-from .forms import EditDetailEventEcoForm
 from .models import EventEco
-from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.decorators import method_decorator
-
-
-@method_decorator(staff_member_required, name='dispatch')
-class UpdateEventEcoDetail(SuccessMessageMixin, UpdateView):
-    form_class = EditDetailEventEcoForm
-    model = EventEco
-    context_object_name = 'eventeco'
-    template_name = "edit_eventeco.html"
-    success_message = "Edited Succesfully"
-
-    def get_success_url(self):
-        return reverse('eventeco_detail', kwargs={'pk': self.object.pk})
-
 
 class EventEcoDetail(DetailView):
     context_object_name = 'eventeco'
@@ -33,6 +15,19 @@ class EventEcoDetail(DetailView):
         dataservice = DataService()
         event = dataservice.get_valid_event_by_id(self.kwargs.get('pk'))
         return event
+
+def search_event(request):
+    dataservice = DataService()
+    events = []
+    count = 0
+    search = ''
+
+    if request.method == 'POST':
+        search = request.POST.get('search')
+        events = dataservice.get_events_by_filter(search)
+        count = events.__len__()
+
+    return render(request, 'search.html', { 'events': events, 'count': count, 'search': search })
 
 def enviar_email_evento(request):
     dataservice = DataService()

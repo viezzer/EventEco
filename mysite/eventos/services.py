@@ -2,6 +2,7 @@ from datetime import datetime
 import requests
 from .models import EventEco, SymplaCategory, SymplaAddress, SymplaEvent, SymplaHost, SymplaParticipant
 import pytz
+from django.db.models import Q
 
 utc = pytz.UTC
 
@@ -262,3 +263,12 @@ class DataService:
             participant.event = event
 
         return sympla_participants
+    
+    def get_events_by_filter(self, search):
+        events = self.get_valid_events()
+
+        if search:
+            search_lower = search.lower()
+            events = [event for event in events if search_lower in event.name.lower()]
+
+        return events

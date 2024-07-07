@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% load static %}
+
+{% block title %}EventEco • Pesquisa{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/search.css' %}" type="text/css">
+{% endblock extra_css %}
+
+{% block content %}
+
+<div class="col-md-10 mx-auto px-10 py-4">
+    <div class="row align-items-center justify-content-between">
+        <div class="col-md-2">
+            <h1>EventEco</h1>
+            <p>Procure por eventos que estão chegando</p>
+        </div>
+        <div class="col-md-8">
+            <form method="post" action="/eventos/search/">
+                {% csrf_token %}
+                <div class="search-group">
+                <input name="search" type="text" class="form-control" placeholder="Procure por eventos que estão chegando" aria-label="Search">
+                <button class="btn" type="submit" id="button-addon2">
+                    <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </form>
+        </div>
+        <div class="col-md-1">
+            <a href="#" class="rounded-link">
+                <img src="https://placehold.co/50x50" alt="Icon">
+            </a>
+        </div>  
+    </div>
+    <div>
+        <h3>Resultados para "{{ search }}"</h3>
+        <p>{{ count }} evento(s) encontrado(s)</p>
+        <div class="event-grid">
+            {% for event in events %}
+                <a href="/eventos/{{event.id}}" class="event-info">
+                    <h4>{{ event.name }}</h4>
+                    <div>{{ event.detail|safe }}</div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

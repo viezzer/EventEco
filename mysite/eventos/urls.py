@@ -1,11 +1,11 @@
-from django.urls import path, include
-from .views import EventEcoDetail, UpdateEventEcoDetail, enviar_email_evento
+from django.urls import path
+from .views import EventEcoDetail, enviar_email_evento, search_event
 
 from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
     path("email/", enviar_email_evento, name="email"),
-    path('<int:pk>/edit/', UpdateEventEcoDetail.as_view(), name="edit_eventeco"),
+    path("search/", search_event, name="search"),
     path('<int:pk>/', EventEcoDetail.as_view(), name="eventeco_detail")
 ]
