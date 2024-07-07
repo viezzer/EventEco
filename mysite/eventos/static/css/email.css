@@ -1,0 +1,31 @@
+.email-card {
+    background-color: #E8EAEE;
+    border-radius: 1rem;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.email-card > .form-group {
+    max-width: 750px;
+}
+
+.email-card > form > select {
+    max-width: 500px;
+}
+
+.btn-primary{
+    background-color: #A0C170;
+    border-color: #A0C170;
+}
+
+.btn-primary:hover {
+    background-color: #8ba762;
+    border-color: #8ba762;
+}
+
+.btn-primary:focus-within,
+.btn-primary:focus-visible {
+    background-color: #8ba762;
+    border-color: #8ba762;
+}

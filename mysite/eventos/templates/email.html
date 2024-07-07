@@ -1,24 +1,38 @@
-<form method="get">
-    {% csrf_token %}
-    <label for="category">Categoria:</label>
-    <select name="category" id="category">
-        <option value="Todas">Todas</option>
-        {% for category in categories %}
-            <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category}}</option>
-        {% endfor %}
-    </select>
+{% extends "layout.html" %}
 
-    <button type="submit" name="action" value="filter">Filtrar</button>
-    <button type="submit" name="action" value="send_email">Enviar Email</button>
-</form>
+{% load static %}
 
-{% if participants %}
-    <h2>Filtered Participants:</h2>
-    <ul>
-        {% for participant in participants %}
-            <li>{{ participant.name }} - {{ participant.email }}</li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No participants found.</p>
-{% endif %}
+{% block title %}EventEco • Enviar e-mail{% endblock title %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/email.css' %}" type="text/css">
+{% endblock extra_css %}
+
+{% block content %}
+<div class="col-md-10 mx-auto px-10 py-4">
+    <div class="email-card">
+        <h2>
+            Enviar email
+        </h2>
+        <form method="get">
+            {% csrf_token %}
+            <select class="custom-select " name="category" id="category" placeholder="Selecionar categoria">
+                <option value="-">Selecionar categoria</option>
+                {% for category in categories %}
+                    <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category}}</option>
+                {% endfor %}
+            </select>
+            {{ form_class.media }}
+            {% for field in form_class %}
+            <div class="form-group mt-2">
+                <div><label for="{{ field.id_for_label }}" class="text-dark font-weight-bold">Corpo-email: </label></div>
+                {{ field }}
+            </div>
+            {% endfor %}
+            <button type="submit" name="action" value="send_email" class="btn btn-primary float-right">Enviar Email</button>
+            <button type="submit" name="action" value="export" class="btn btn-primary float-right mr-2">Exportar</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}

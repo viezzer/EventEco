@@ -1,4 +1,9 @@
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from django.http import HttpResponse
 from django.shortcuts import render
+
+from .forms import EditDetailEventEcoForm
 from .services import DataService
 from .utils import *
 
@@ -36,6 +41,10 @@ def enviar_email_evento(request):
     participants = []
     selected_category = request.GET.get('category')
     action = request.GET.get('action')
+    content = request.GET.get('detail')
+
+    print(request.GET)
+    form_class = EditDetailEventEcoForm
     
     if selected_category:
         # Filtre os participantes com base na categoria selecionada
@@ -45,10 +54,23 @@ def enviar_email_evento(request):
         # Enviar email para os participantes filtrados
         to_emails = [participant.email for participant in participants]
         subject = "EventEco"
-        content = "Conteúdo do email."
-        # print(send_mailer_send_email(to_emails, subject, content))
+        content = content
         send_test_email(to_emails,subject,content)
-    return render(request, 'email.html', {'categories': categories, 'selected_category': selected_category,'participants': participants})
+
+    if action == 'export':
+        subject = "EventEco"
+        body = content
+
+        if not body:
+            body = "Sem conteúdo disponível."
+        email_content = f"Subject: {subject}\n"
+        email_content += f"To: {', '.join([participant.email for participant in participants]) if participants else 'sem_destinatarios@example.com'}\n\n"
+        email_content += body
+        response = HttpResponse(email_content, content_type='text/plain')
+        response['Content-Disposition'] = 'attachment; filename="email.txt"'
+        return response
+
+    return render(request, 'email.html', {'categories': categories, 'selected_category': selected_category,'participants': participants, 'form_class': form_class })
     
 def index(request):
     service = DataService()
