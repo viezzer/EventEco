@@ -73,8 +73,8 @@ class CreateEventEcoFormAdmin(forms.ModelForm):
                 cancelled=preset.cancelled,
                 image=preset.image,
                 url=preset.url,
-                host_name=preset.host.name,
-                category_name=preset.category_prim.name
+                host_name=preset.host_name,
+                category_name=preset.category_name
             )
             return event_eco
         else:
