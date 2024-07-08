@@ -66,6 +66,8 @@ class SymplaApi:
                 category_prim=category_prim,
                 category_sec=category_sec,
                 url=dados['url'],
+                host_name=host.name,
+                category_name=category_prim.name
             )
 
             events.append(event)
@@ -113,7 +115,9 @@ class SymplaApi:
             host=host,
             category_prim=category_prim,
             category_sec=category_sec,
-            url=dados['url']
+            url=dados['url'],
+            host_name=host.name,
+            category_name=category_prim.name
         )
 
         return event

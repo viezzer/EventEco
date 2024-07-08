@@ -14,6 +14,8 @@ class EventEco(models.Model):
     cancelled = models.BooleanField(default=False)
     image = models.CharField(max_length=255)
     url = models.CharField(max_length=255)
+    host_name = models.CharField(max_length=255)
+    category_name = models.CharField(max_length=255)
 
     def __str__(self):
         return f"Evento Eco: {self.id}"
@@ -86,9 +88,11 @@ class SymplaEvent:
     category_prim: SymplaCategory
     category_sec: SymplaCategory
     url: str
+    host_name: str
+    category_name: str
 
     def __init__(self, id, start_date, end_date, name, detail, private_event, published,
-                 cancelled, image, address, host, category_prim, category_sec, url):
+                 cancelled, image, address, host, category_prim, category_sec, url, host_name, category_name):
 
         self.id = id
         self.start_date = start_date
@@ -104,6 +108,8 @@ class SymplaEvent:
         self.category_prim = category_prim
         self.category_sec = category_sec
         self.url = url
+        self.host_name = host_name
+        self.category_name = category_name
 
     def is_valid(self):
         return not self.cancelled and not self.private_event and self.published

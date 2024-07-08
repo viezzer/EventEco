@@ -35,6 +35,8 @@ class CreateEventEcoFormAdmin(forms.ModelForm):
             cancelled=False,
             image="https://sua-imagem-aqui.com.br",
             url="https://sua-url-aqui.com.br",
+            host_name='Organizador do Evento',
+            category_name='category-name'
         )
 
         self.preset_events.append(blank_event)
@@ -70,7 +72,9 @@ class CreateEventEcoFormAdmin(forms.ModelForm):
                 published=preset.published,
                 cancelled=preset.cancelled,
                 image=preset.image,
-                url=preset.url
+                url=preset.url,
+                host_name=preset.host.name,
+                category_name=preset.category_prim.name
             )
             return event_eco
         else:
@@ -91,6 +95,8 @@ class EditEventEcoFormAdmin(forms.ModelForm):
             'detail',
             'url',
             'image',
+            'host_name',
+            'category_name',
         )
         widgets = {
             'start_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),  # Widget para selecionar data e horário
